@@ -43,4 +43,4 @@ jobs:
 
     # Create the bucket in the specified region        
     - name: "Bucket Create"
-      run: gcloud storage buckets create gs://serverless-bucket --location=asia-south2
+      run: gcloud storage buckets create gs://serverless-cf --location=asia-south2
