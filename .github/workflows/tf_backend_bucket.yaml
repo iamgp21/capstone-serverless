@@ -4,8 +4,9 @@ on:
   push:
     # branches:
     #   - dev
-    # paths:
-    #   - infra/**
+
+    paths:
+      - script/**
   
   workflow_dispatch:
 
@@ -43,4 +44,4 @@ jobs:
 
     # Create the bucket in the specified region        
     - name: "Bucket Create"
-      run: gcloud storage buckets create gs://serverless-cf --location=asia-south2
+      run: ./script/remote-backend.sh
