@@ -1,0 +1,76 @@
+name: Serverless Infra
+
+on:
+  push:
+    # branches:
+    #   - dev
+    paths:
+      - infra/**
+  
+  workflow_dispatch:
+
+jobs:
+  serverless_infra:
+    name: 'Serverless Infra'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: 'actions/checkout@v4'
+      
+    - id: "auth" 
+      name: "Authenticate to Google Cloud"
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+    
+    # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+    - name: "Set up Cloud SDK"
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+    
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: "Setup Terraform"
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.1.7"
+    
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: "Terraform Format"
+      id: fmt
+      run: terraform fmt
+      continue-on-error: false
+    
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: "Terraform Init"
+      id: init
+      run: |
+        rm -rf .terraform
+        rm -rf .terraform.lock.hcl
+        terraform init -input=false
+
+    # Generates an execution plan for Terraform
+    - name: "Terraform Plan"
+      id: plan
+      run: terraform plan -var-file terraform.tfvars -input=false -lock=false -refresh=true -no-color
+
+    # Exit when plan failes
+    - name: "Terraform Plan Status"
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+  
+    - name: "Terraform Apply"
+      id: tfapply
+      if: github.event_name == 'push'
+      run: terraform apply -var-file terraform.tfvars -input=false -lock=false -refresh=true -auto-approve -no-color
