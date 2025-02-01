@@ -1,0 +1,46 @@
+name: Terraform Remote Backend
+
+on:
+  push:
+    # branches:
+    #   - dev
+    # paths:
+    #   - infra/**
+  
+  workflow_dispatch:
+
+jobs:
+  terrform_remote_backend:
+    name: 'GCS Buket for Terraform Remote Backend'
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: ./infra
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: 'actions/checkout@v4'
+      
+    - name: "Authenticate to Google Cloud"
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+      continue-on-error: false
+    
+    # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+    - name: "set up gcloud"
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+      continue-on-error: false
+
+    # Create the bucket in the specified region        
+    - name: "Bucket Create"
+      run: gcloud storage buckets create gs://serverless-bucket --location=asia-south2
