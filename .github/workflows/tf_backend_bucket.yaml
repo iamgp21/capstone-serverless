@@ -44,4 +44,5 @@ jobs:
 
     # Create the bucket in the specified region        
     - name: "Bucket Create"
-      run: ./script/remote-backend.sh
+
+      run: chmod 777 script/remote-backend.sh && ./script/remote-backend.sh
