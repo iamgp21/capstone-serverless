@@ -1,0 +1,55 @@
+name: Deploy Cloud Function
+
+on:
+  workflow_dispatch:
+
+  push:
+    # branches:
+    #   - dev
+
+    paths:
+      - src/**
+      - .github/workflows/deploy-gcf.yaml
+
+jobs:      
+  deploy-cloud-function:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: 'actions/checkout@v4'
+
+    - id: "auth" 
+      name: "Authenticate to Google Cloud"
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+
+    - id: 'deploy'
+      name: 'Deploy Function'
+      uses: 'google-github-actions/deploy-cloud-functions@v2.1.0'
+      with:
+        name: 'github-cf'
+        runtime: 'python312'
+        entry_point: 'trigger'
+        memory_mb: '128'
+        region: 'asia-south1'
+        project_id: '${{ vars.GCP_PROJECT }}'
+        # vpc_connector: 'connector01'
+        # vpc_connector_egress_settings: 'ALL_TRAFFIC'
+        ingress_settings: 'ALLOW_ALL'
+        service_account_email: '${{ vars.RUNTIME_SERVICE_ACCOUNT }}'
+        timeout: '60'
+        min_instances: '0'
+        max_instances: '1'
+        secret_environment_variables: 'GITHUB_PAT=${{ secrets.SECRET_PAT }}'
+        build_environment_variables: 'GOOGLE_FUNCTION_SOURCE=main.py'
+        event_trigger_type: '${{ vars.EVENT_TRIGGER_TYPE }}'
+        event_trigger_resource: '${{ vars.PUBSUB_TOPIC_NAME }}'
+        event_trigger_retry: 'false'
+        source_dir: './src'
+        docker_registry: 'ARTIFACT_REGISTRY'
