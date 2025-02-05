@@ -35,18 +35,22 @@ This repo Demonstrates Deploying Event Driven Cloud Function on GCP Serverless P
 
 ![GCP Serverless](./img/GCP_CloudFunction_1stGen.JPG)
 
-<!-- ### Serverless Flow Validation:
+
+### Serverless Validation:
 
 - Cloud Scheduler Job Run:
 
-![Cloud Scheduler Job](./img/cloud_scheduler_job.JPG) -->
+![Cloud Scheduler Job](./img/cloud_scheduler.png)
 
 
-<!-- - Cloud Function:
+- Cloud Function:
 
-![Cloud Function](./img/cloud_function.JPG) -->
+![Cloud Function](./img/cloud_function.png)
 
-<!-- - Cloud Function Logs:
 
-![Cloud Function Logs](./img/cloud_function_logs.JPG) -->
+- Cloud Function Logs:
+
+![sucess](./img/success.png)
+
+![exception](./img/exception.png)
 
