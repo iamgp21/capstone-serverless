@@ -22,7 +22,7 @@ def trigger(event, context):
         ##Create a Github Repo:
         repo = user.create_repo("testrepo")
 
-        print(f"User {user} created Github Repo: {repo}")
+        print(f"Github {repo} created")
         
         gobj.close()
     
