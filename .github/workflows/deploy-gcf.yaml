@@ -46,7 +46,7 @@ jobs:
         timeout: '60'
         min_instances: '0'
         max_instances: '1'
-        secret_environment_variables: 'GITHUB_PAT=${{ secrets.SECRET_PAT }}'
+        secret_environment_variables: 'GITHUB_PAT=${{ secrets.SECRET_PAT }}' ## format should be: projects/project_name/secrets/secret_name/versions/version_number
         build_environment_variables: 'GOOGLE_FUNCTION_SOURCE=main.py'
         event_trigger_type: '${{ vars.EVENT_TRIGGER_TYPE }}'
         event_trigger_resource: '${{ vars.PUBSUB_TOPIC_NAME }}'
