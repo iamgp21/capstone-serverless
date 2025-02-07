@@ -31,9 +31,9 @@ This repo Demonstrates Deploying Event Driven Cloud Function on GCP Serverless P
 - Google Secret Manager Service used to store any secrets/passwords used by Cloud Function.
 
 
-### Serverless HLD:
+### Serverless Flow:
 
-![GCP Serverless](./img/GCP_CloudFunction_1stGen.JPG)
+![GCP Serverless Flow](./drawio/EventDriven_CloudFunction_Animation.gif)
 
 
 ### Serverless Validation:
@@ -48,9 +48,8 @@ This repo Demonstrates Deploying Event Driven Cloud Function on GCP Serverless P
 ![Cloud Function](./img/cloud_function.png)
 
 
-- Cloud Function Logs:
+- Cloud Function Logs to Grafana Loki:
 
-![sucess](./img/success.png)
+![Grafana Loki](./img/loki_output.png)
 
-![exception](./img/exception.png)
 
