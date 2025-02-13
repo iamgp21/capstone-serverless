@@ -10,6 +10,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  infra_scan:
+    name: 'Infra Scan'
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: ./infra
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: 'actions/checkout@v4' 
+
+    - name: Make Infra Scan Directory
+      run: mkdir -p infra_scan_results
+    
+    - name: run kics Scan
+      uses: Checkmarx/kics-github-action@v1.7.0
+      with:
+        path: 'infra'
+        output_path: 'infra_scan_results'
+    
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: infra_scan_results/results.sarif
+    
   serverless_infra:
     name: 'Serverless Infra'
     runs-on: ubuntu-latest
