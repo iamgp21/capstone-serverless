@@ -42,6 +42,7 @@ jobs:
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: infra_scan_results/results.sarif
+        token: ${{ secrets.SECRET_PAT }}
     
   serverless_infra:
     name: 'Serverless Infra'
