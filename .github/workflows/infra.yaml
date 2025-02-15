@@ -33,16 +33,19 @@ jobs:
       uses: Checkmarx/kics-github-action@v2.1.5
       with:
         path: 'infra'
-        ignore_on_exit: results
-        output_path: 'infra_scan_results'
+        ignore_on_exit: results #dont fail on results (overwrite default behaviour fails)
+        output_path: 'infra_scan_results' # when provided with a directory on output_path it will generate the specified reports file named 'results.{extension}'
         platform_type: terraform
         output_formats: 'json,sarif'
     
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v3
-      with:
-        sarif_file: infra_scan_results/results.sarif
-        token: ${{ secrets.SECRET_PAT }}
+    - name: Display Results
+      run: |
+        cat infra_scan_results/results.sarif
+
+    # - name: Upload SARIF file
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   with:
+    #     sarif_file: infra_scan_results/results.sarif
     
   serverless_infra:
     name: 'Serverless Infra'
