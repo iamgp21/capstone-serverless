@@ -1,5 +1,7 @@
 # Capstone-Serverless
-This repo Demonstrates Deploying Event Driven Cloud Function on GCP Serverless Platform.
+This repo demonstrates deploying Event Driven Cloud Function using Terraform & Github Actions on Google Cloud Platform. 
+
+It also has integration related to Static Code Scanning of Terraform Code using KICS tool and Cloud Function logs being visualized on Grafana Loki Platform.
 
 ### Pre-Requisites:
 
@@ -25,10 +27,17 @@ This repo Demonstrates Deploying Event Driven Cloud Function on GCP Serverless P
 
 
 ### Security Best Practice:
+- Static Code Scanning of Terraform Code using KICS tool.
 
 - Workload Indentity Federation is used for GCP Authentication with Github Actions.
 
 - Google Secret Manager Service used to store any secrets/passwords used by Cloud Function.
+
+
+### Static Code Scanning Results:
+
+**SARIF results uploaded to Github**
+![Static Code Scan Results](./drawio/Static_Code_Scanning_Results_Animation.gif)
 
 
 ### Serverless Flow:
